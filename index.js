@@ -1,15 +1,15 @@
 //começo importações
 const express = require('express') //usado pra criar servidor http
 const bodyParser = require('body-parser') 
+
+const { client, connectToMongoDB } = require('./db.js') 
+const { signup, signin } = require('./auth.js')   
+//fim importações
+
 const PORT = 3000 // porta a ser usada posteriormente com express
 const app = express() // cria uma aplicação express
 
-const { signup, signin } = require('./auth.js') 
-const { client, connectToMongoDB } = require('./db.js') 
-//fim importações
-
 app.use(bodyParser.json()) //leva os dados do corpo da requição pro request.body
-
 app.post('/signup', signup)
 app.post('/signin', signin)
 
@@ -18,7 +18,7 @@ app.post('/products/mangas/', async function (request, response) {
   const manga = request.body
   const mangaCollection = client.db('mangaten').collection('manga')
   await mangaCollection.insertOne(manga)
-  response.json({ message: 'manga cadastrado'})
+  response.json({ message: 'Manga Cadastrado'})
 })
 
 // listar mangas
@@ -36,19 +36,26 @@ app.get('/products/mangas/:name', async function (request, response) {
   response.json({ product: manga })
 })
 
-// excluir manga por nome
+// excluir manga por titulo
 app.delete('/products/mangas/:name', async function (request, response) {
   const name = request.params.name
   const mangaCollection = client.db('mangaten').collection('manga')
   await mangaCollection.findOneAndDelete({ title: name })
-  response.json({ message: 'Manga Deletado com sucesso' })
+  response.json({ message: 'Manga Deletado' })
+})
+
+// listar users
+app.get('/users', async function (request, response) {
+  const usersCollection = client.db('mangaten').collection('users')
+  const users = await usersCollection.find({}).toArray()
+  response.json({ product: users })
 })
 
 async function main() {
   await connectToMongoDB()
 
   app.listen(PORT, function () {
-    console.log('Servidor rodando em localhost:' + PORT)
+    console.log('Servidor em localhost:' + PORT)
   })
 }
 

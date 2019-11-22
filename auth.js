@@ -1,43 +1,24 @@
 const jwt = require('jsonwebtoken') // JWT bibliota pra gerar tokens de autenticaçãode, usando criptografia
+const { client } = require('./db.js') 
 
-
-// BANCO
-const { client } = require('./db.js')
-
-/*
- * função que recebe um usuario e retorna um novo token de acesso para aquele usuario
-*/
-function generateToken(user) {
-  // dados que serãõ encodificados dentro do token para serem usados depois mais tarde pelo servidor
-  let payload = { email: user.email }
-  // senha super secreta pro servidor descriptografar o token e verificar se ele é valido e pegar as informações do payload
-  let secret = 'Batata é muito bom'
-  // options para configurar como o token irá ser gerado, como por exemplo quando ele irá experir deixar de ser valido
+function generateToken(user) { // recebe um usuario, retorna um token de acesso
+  let payload = { email: user.email } // dados que serão criptografados dentro do token para serem usados pelo servidor
+  let secret = 'I am the Bone of my Sword Steel is my Body and Fire is my Blood' // senha pro servidor decriptografar o token 
+  // options: como o token vai ser gerado, como por exemplo quando ele vai deixar de ser valido
   let options = { expiresIn: '1d' }
-
-  // jwt.sign metodo do jwt que gera um token dado os seguites parametros: payload, secret e options
-  let token = jwt.sign(payload, secret, options)
-
-  // returna o token pra quem chamou a função generateToken
+  let token = jwt.sign(payload, secret, options) //gera o token
   return token
 }
 
-
-/*
- * função que executa o signup pega os dados do body da requisão e cria um novo usuario com os dados
-*/
-function signup(request, response) {
-  const { email, password } = request.body
-
-  if (!email || !password) {
-    // se não tiver email ou senha, retorna um erro pro front
-    return response.json({ message: "Need email and password" })
+async function signup(request, response) {
+  const { email, password, name} = request.body 
+  if (!email || !password || !name) {// se algum campo estiver vazio, retorna um erro pro front 
+    return response.json({ message: "preencha todos os campos" })
   }
-
   const usersCollection = client.db('mangaten').collection('users')
-  // usersCollection.insertOne({ email: ?, password: ? })
+  await usersCollection.insertOne({ email, password})
 
-  const user = createUser(emai, password)
+  const user = createUser(email, password)
   // TODO: criar usuario de verdade com um banco de dados
 
   // cria um novo token pro usuario qeu acabou de ser criado
