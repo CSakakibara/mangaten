@@ -16,7 +16,11 @@ async function signup(request, response) {
     return response.json({ message: "preencha todos os campos" })
   }
   const usersCollection = client.db('mangaten').collection('users')
-  const user = request.body 
+  const user = {
+    email: email,
+    password: password,
+    name: name 
+  }
   await usersCollection.insertOne(user) //cria usuario no banco
   const token = generateToken(user)// gera token pro user
   response.json({ token }) //retorna o token
