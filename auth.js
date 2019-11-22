@@ -1,11 +1,11 @@
-const jwt = require('jsonwebtoken') // JWT bibliota pra gerar tokens de autenticaçãode, usando criptografia
+const jwt = require('jsonwebtoken') // bibliota pra gerar tokens de autenticaçãode, usando criptografia
 const { client } = require('./db.js') 
 
 function generateToken(user) { // recebe um usuario, retorna um token de acesso
   let payload = { email: user.email } // dados que serão criptografados dentro do token para serem usados pelo servidor
   let secret = 'I am the Bone of my Sword Steel is my Body and Fire is my Blood' // senha pro servidor decriptografar o token 
-  // options: como o token vai ser gerado, como por exemplo quando ele vai deixar de ser valido
-  let options = { expiresIn: '1d' }
+  // options: como o token vai ser gerado
+  let options = { expiresIn: '1d' } //define tempo de expiração do token
   let token = jwt.sign(payload, secret, options) //gera o token
   return token
 }
@@ -24,16 +24,16 @@ async function signup(request, response) {
 
 async function signin(request, response) {
   const { email, password } = request.body
-  if (!email || !password) { 
+  if (!email || !password) { //verifica se os campos foram preenchidos
     return response.json({ message: "preencha email e password" }) 
   }
-  const usersCollection = client.db('mangaten').collection('users')
-  const user = await usersCollection.findOne({ email: email, password: password })
+  const usersCollection = client.db('mangaten').collection('users') 
+  const user = await usersCollection.findOne({ email: email, password: password }) //procura usuario com email e senha informado
   if (user === null || user === undefined) {
-    return response.json({ message: "email ou password invalido" })
+    return response.json({ message: "email ou password invalido" }) //exibe mensagem se não achar correspondencia
   }
-  const token = generateToken(user)
-  response.json({ token })
+  const token = generateToken(user) //gera token
+  response.json({ token }) //retorna token
 }
 
 module.exports = { //exporta as funçoes 
