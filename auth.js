@@ -16,44 +16,27 @@ async function signup(request, response) {
     return response.json({ message: "preencha todos os campos" })
   }
   const usersCollection = client.db('mangaten').collection('users')
-  await usersCollection.insertOne({ email, password})
-
-  const user = createUser(email, password)
-  // TODO: criar usuario de verdade com um banco de dados
-
-  // cria um novo token pro usuario qeu acabou de ser criado
-  const token = generateToken(user)
-
-  response.json({ token })
+  const user = request.body 
+  await usersCollection.insertOne(user) //cria usuario no banco
+  const token = generateToken(user)// gera token pro user
+  response.json({ token }) //retorna o token
 }
 
-/*
- * função de sign in que pega os dados do usuario e loga no sistema e depois de logada, um token de acesso
-*/
 async function signin(request, response) {
   const { email, password } = request.body
-
-  if (!email || !password) {
-    // se não tiver email ou senha, retorna um erro pro front
-    return response.json({ message: "Need email and password" })
+  if (!email || !password) { 
+    return response.json({ message: "preencha email e password" }) 
   }
-
   const usersCollection = client.db('mangaten').collection('users')
-
   const user = await usersCollection.findOne({ email: email, password: password })
-
   if (user === null || user === undefined) {
-    // se não achar nenhum usuario signica que a senha é invalida ou o usuario não existe
-    return response.json({ message: "Email or password invalid" })
+    return response.json({ message: "email ou password invalido" })
   }
-
-  // cria um novo token pro usario que acabou de fazer signin
   const token = generateToken(user)
-
   response.json({ token })
 }
 
-module.exports = {
-  signup, // exporta signup
-  signin // export signin
+module.exports = { //exporta as funçoes 
+  signup, 
+  signin 
 }
