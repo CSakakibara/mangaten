@@ -15,15 +15,15 @@ async function signup(request, response) {
   if (!email || !password || !name) {// se algum campo estiver vazio, retorna um erro pro front 
     return response.json({ message: "preencha todos os campos" })
   }
-  const usersCollection = client.db('mangaten').collection('users')
-  const user = {
-    email: email,
-    password: password,
-    name: name 
+  const registeredEmail = await usersCollection.findOne({email: email})
+  if (registeredEmail){
+    return response.json({ message: "email ocupado por outra conta"})
   }
+  const user = {email: email, password: password, name: name}
+  const usersCollection = client.db('mangaten').collection('users')
   await usersCollection.insertOne(user) //cria usuario no banco
   const token = generateToken(user)// gera token pro user
-  response.json({ token }) //retorna o token
+  response.json({ token }) //retorna o token 
 }
 
 async function signin(request, response) {
@@ -34,7 +34,7 @@ async function signin(request, response) {
   const usersCollection = client.db('mangaten').collection('users') 
   const user = await usersCollection.findOne({ email: email, password: password }) //procura usuario com email e senha informado
   if (user === null || user === undefined) {
-    return response.json({ message: "email ou password invalido" }) //exibe mensagem se não achar correspondencia
+    return response.json({ message: "email ou password incorreto" }) //exibe mensagem se não achar correspondencia
   }
   const token = generateToken(user) //gera token
   response.json({ token }) //retorna token
