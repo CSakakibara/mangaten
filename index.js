@@ -1,47 +1,61 @@
 //começo importações
 const express = require('express') //usado pra criar servidor http
-const bodyParser = require('body-parser') 
+const bodyParser = require('body-parser')
 
-const { client, connectToMongoDB } = require('./db.js') 
-const { signup, signin } = require('./auth.js')   
+const { client, connectToMongoDB, ObjectId } = require('./db.js')
+const { signUp, signIn, protect } = require('./auth.js')
 //fim importações
 
 const PORT = 3000 // porta a ser usada posteriormente com express
 const app = express() // cria uma aplicação express
 
 app.use(bodyParser.json()) //leva os dados do corpo da requição pro request.body
-app.post('/signup', signup)
-app.post('/signin', signin)
+
+app.post('/signup', signUp)
+app.post('/signin', signIn)
 
 // cadastrar manga
-app.post('/products/mangas/', async function (request, response) {
+app.post('/products/mangas/', protect, async function (request, response) {
+  const user = request.user
+
   const manga = request.body
+  manga.createdBy = user._id
+
   const mangaCollection = client.db('mangaten').collection('manga')
   await mangaCollection.insertOne(manga)
-  response.json({ message: 'Manga Cadastrado'})
+  response.status(201).json({ message: 'Manga Cadastrado' })
 })
 
 // listar mangas
 app.get('/products/mangas', async function (request, response) {
   const mangaCollection = client.db('mangaten').collection('manga')
   const mangas = await mangaCollection.find({}).toArray()
-  response.json({ product: mangas })
+  response.status(200).json({ product: mangas })
 })
 
 // buscar manga por titulo
-app.get('/products/mangas/:name', async function (request, response) {
-  const name = request.params.name
+app.get('/products/mangas/:id', async function (request, response) {
+  const id = request.params.id
   const mangaCollection = client.db('mangaten').collection('manga')
-  const manga = await mangaCollection.findOne({ title: name })
-  response.json({ product: manga })
+  const manga = await mangaCollection.findOne({ _id: ObjectId(id) })
+  response.status(200).json({ product: manga })
 })
 
 // excluir manga por titulo
-app.delete('/products/mangas/:name', async function (request, response) {
-  const name = request.params.name
+app.delete('/products/mangas/:id', protect, async function (request, response) {
+  const id = request.params.id
+  const user = request.user
+
   const mangaCollection = client.db('mangaten').collection('manga')
-  await mangaCollection.findOneAndDelete({ title: name })
-  response.json({ message: 'Manga Deletado' })
+  const deleteManga = await mangaCollection.findOneAndDelete({
+    _id: ObjectId(id),
+    createdBy: ObjectId(user._id)
+  })
+  console.log('deleteManga', deleteManga.value)
+
+  const manga = deleteManga.value
+
+  response.status(200).json(manga)
 })
 
 // listar users
