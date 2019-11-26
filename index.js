@@ -42,8 +42,8 @@ app.delete('/products/mangas/:id', protect, async function (request, response) {
   const id = request.params.id// recebe o id
   const user = request.user// recebe os dados do usuario
 
-  const mangaCollection = client.db('mangaten').collection('manga')
-  const deleteManga = await mangaCollection.findOneAndDelete({
+  const mangaCollection = client.db('mangaten').collection('manga')//referencia a coleção de manga
+  const deleteManga = await mangaCollection.findOneAndDelete({ // fazer alterações para verificar se o usuario é adm
     _id: ObjectId(id),
     createdBy: ObjectId(user._id)
   })
@@ -51,14 +51,14 @@ app.delete('/products/mangas/:id', protect, async function (request, response) {
 
   const manga = deleteManga.value
 
-  response.status(200).json(manga)
+  response.status(200).json(manga) //retorna mensagem
 })
 
 // listar users
 app.get('/users', async function (request, response) {
-  const usersCollection = client.db('mangaten').collection('users')
-  const users = await usersCollection.find({}).toArray()
-  response.json({ product: users })
+  const usersCollection = client.db('mangaten').collection('users') //definir coleção de usuarios
+  const users = await usersCollection.find({}).toArray()//recebe todos os itens da coleção
+  response.json({ product: users })//retorna todos os itens recebidos
 })
 
 async function main() {
