@@ -56,7 +56,7 @@ async function signUp(request, response) {
   const registeredEmail = await usersCollection.findOne({ email })
   if (registeredEmail) {
     return response.json({ message: "email ocupado por outra conta" })
-  }k
+  }
 
   const passwordHash = await encryptPassword(password)
 
@@ -137,4 +137,3 @@ module.exports = { //exporta as funçoes
   signIn,
   protect
 }
-
