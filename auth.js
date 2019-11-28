@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken') // bibliota pra gerar tokens de autenticaçãode, usando criptografia
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt') //criptografia pras senhas
 
 const secret = 'I am the Bone of my Sword Steel is my Body and Fire is my Blood' // senha pro servidor decriptografar o token 
 
-const { client, ObjectId } = require('./db.js')
+const { client, ObjectId } = require('./db.js')//db
 
 
 function generateToken(user) { // recebe um usuario, retorna um token de acesso

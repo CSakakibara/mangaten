@@ -1,5 +1,4 @@
-// db
-const { client, ObjectId } = require('../../db.js')
+const { client, ObjectId } = require('../../db.js') //db
 
 async function getOne(req, res) {
   const id = req.params.id //recebe o id
