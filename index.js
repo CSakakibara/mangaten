@@ -6,7 +6,8 @@ const { signUp, signIn, protect } = require('./auth.js')
 //fim importações
 
 // routes
-const productRouter = require('./resources/product/product.router')
+const productsRouter = require('./resources/product/products.router')
+const usersRouter = require('./resources/user/users.router')
 
 const PORT = 3000 // porta a ser usada posteriormente com express
 const app = express() // cria uma aplicação express
@@ -15,14 +16,8 @@ app.use(express.json()) // middleware leva os dados do corpo da requição pro r
 
 app.post('/signup', signUp)
 app.post('/signin', signIn)
-app.use('/products', productRouter)
-
-// listar users
-app.get('/users', async function (request, response) {
-  const usersCollection = client.db('mangaten').collection('users') //definir coleção de usuarios
-  const users = await usersCollection.find({}).toArray()//recebe todos os itens da coleção
-  response.json({ product: users })//retorna todos os itens recebidos
-})
+app.use('/products', productsRouter)
+app.get('/users', usersRouter)
 
 async function main() {
   await connectToMongoDB()
