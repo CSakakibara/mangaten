@@ -17,10 +17,13 @@ async function getOne(req, res) {
 
 async function getMany(req, res) {
   const productCollection = client.db('mangaten').collection('product') //define a coleção
+  try{
+    const mangas = await productCollection.find({}).toArray() //traz todos os itens da coleção
 
-  const mangas = await productCollection.find({}).toArray() //traz todos os itens da coleção
-
-  res.status(200).json({ product: mangas }) //retorna os itens
+    res.json({ product: mangas }) //retorna os itens
+  } catch(error){
+    res.status(404).end()
+  }
 }
 
 
@@ -31,8 +34,12 @@ async function createOne(req, res) { //cadastro manga
   // manga.createdBy = user._id // associa no item a ser inserido no banco o id do usuario que esta fazendo o cadastro
 
   const productCollection = client.db('mangaten').collection('product') //define a coleção do banco
-  await productCollection.insertOne(manga) //insere os dados na coleção
-  res.status(201).json({ message: 'Manga Cadastrado' })
+  try{
+    await productCollection.insertOne(manga) //insere os dados na coleção
+    res.status(201).json({ message: 'Manga Cadastrado' })
+  } catch(error){
+    res.status(400).end()
+  }
 }
 
 async function removeOne(req, res) {
