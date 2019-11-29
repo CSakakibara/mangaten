@@ -1,14 +1,10 @@
-//começo importações
 const express = require('express') //usado pra criar servidor http
-
-const { client, connectToMongoDB, ObjectId } = require('./db.js')
-const { signUp, signIn, protect } = require('./auth.js')
+const { client, connectToMongoDB, ObjectId } = require('./db.js') //banco de dados
+const { signUp, signIn, protect } = require('./auth.js') //criar conta, logar, verificar logado
 
 //  routes
 const productsRouter = require('./resources/product/products.router')
 const usersRouter = require('./resources/user/users.router')
-
-//fim importações
 
 const PORT = 3000 // porta a ser usada posteriormente com express
 const app = express() // cria uma aplicação express
