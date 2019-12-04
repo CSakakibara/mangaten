@@ -1,12 +1,12 @@
 const MongoClient = require('mongodb').MongoClient
-const ObjectId = require('mongodb').ObjectId;
+const ObjectId = require('mongodb').ObjectId
 
-const uri = "mongodb+srv://jun:!7NmaainhgsaitkeNna&@mangaten-aqf2h.gcp.mongodb.net/test?retryWrites=true&w=majority"
+const uri = 'mongodb+srv://jun:!7NmaainhgsaitkeNna&@mangaten-aqf2h.gcp.mongodb.net/test?retryWrites=true&w=majority'
 
-const clientOptions = { useNewUrlParser: true, useUnifiedTopology: true } //requirimentos do mongodb
-const client = new MongoClient(uri, clientOptions) //cria o banco
+const clientOptions = { useNewUrlParser: true, useUnifiedTopology: true } // requirimentos do mongodb
+const client = new MongoClient(uri, clientOptions) // cria o banco
 
-function connectToMongoDB() { //conecta no banco
+function connectToMongoDB () { // conecta no banco
   const promise = new Promise(function (resolve) {
     client.connect(function () {
       resolve()

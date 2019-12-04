@@ -1,6 +1,6 @@
-const express = require('express') //usado pra criar servidor http
-const { client, connectToMongoDB, ObjectId } = require('./db.js') //banco de dados
-const { signUp, signIn, protect } = require('./auth.js') //criar conta, logar, verificar logado
+const express = require('express') // usado pra criar servidor http
+const { connectToMongoDB } = require('./db.js') // banco de dados
+const { signUp, signIn } = require('./auth.js') // criar conta, logar, verificar logado
 
 //  routes
 const productsRouter = require('./resources/product/products.router')
@@ -16,7 +16,7 @@ app.post('/signin', signIn)
 app.use('/products', productsRouter)
 app.get('/users', usersRouter)
 
-async function main() { //inicia o servidor
+async function main () { // inicia o servidor
   await connectToMongoDB()
 
   app.listen(PORT, function () {
