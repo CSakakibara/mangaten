@@ -6,10 +6,22 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true
-      // unique: true // Usar no user no campo email e username
     },
     description: String,
-    price: Number
+    price: {
+      type: Number,
+      required: true,
+      trim: true
+    },
+    volume: {
+      type: Number,
+      required: true,
+      trim: true
+    },
+    author: {
+      type: String,
+      trim: true
+    }
   }
 )
 

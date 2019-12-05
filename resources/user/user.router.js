@@ -8,6 +8,7 @@ router.route('/')
 
 router.route('/:id')
   .get(controller.getOne)
+  .put(controller.updateOne)
   .delete(controller.removeOne)
 
 module.exports = router
