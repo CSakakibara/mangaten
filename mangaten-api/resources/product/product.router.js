@@ -1,18 +1,22 @@
+// vendors
 const Router = require('express').Router
 const router = Router()
+
+// auth
+const { protect, protectAdmin } = require('../../utils/auth')
 
 // controller
 const controller = require('./product.controller')
 
-// /product
+// /products
 router.route('/')
   .get(controller.getMany)
-  .post(controller.createOne)
+  .post(protect, protectAdmin, controller.createOne)
 
-// /product/:id
+// /products/:id
 router.route('/:id')
   .get(controller.getOne)
-  .put(controller.updateOne)
-  .delete(controller.removeOne)
+  .put(protect, protectAdmin, controller.updateOne)
+  .delete(protect, protectAdmin, controller.removeOne)
 
 module.exports = router

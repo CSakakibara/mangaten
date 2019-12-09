@@ -1,3 +1,4 @@
+// vendors
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema(
@@ -23,10 +24,12 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
       unique: true
-    }
+    },
+    isAdmin: Boolean
   }
 )
 
-const Model = mongoose.model('user', userSchema)
+// vai ser a collection users no mongodb
+const User = mongoose.model('user', userSchema)
 
-module.exports = Model
+module.exports = User

@@ -1,10 +1,13 @@
+// vendors
 const jwt = require('jsonwebtoken') // bibliota pra gerar tokens de autenticaçãode, usando criptografia
 const bcrypt = require('bcrypt') // criptografia pras senhas
 
+// Model
+const User = require('../resources/user/user.model')
+
 const secret = 'I am the Bone of my Sword Steel is my Body and Fire is my Blood' // senha pro servidor decriptografar o token
 
-const { client, ObjectId } = require('./db.js') // db
-
+// JWT
 function generateToken (user) { // recebe um usuario, retorna um token de acesso
   const payload = { // dados que serão criptografados dentro do token para serem usados pelo servidor
     _id: user._id
@@ -29,6 +32,7 @@ function verifyToken (token) {
   return promise
 }
 
+// user
 function encryptPassword (password) {
   return bcrypt.hash(password, 10)
 }
@@ -42,17 +46,17 @@ function verifyUserPassword (user, rawPassword) {
   return bcrypt.compare(rawPassword, encryptedPassword)
 }
 
-async function signUp (request, response) {
-  const { email, password, name } = request.body
-  if (!email || !password || !name) { // se algum campo estiver vazio, retorna um erro pro front
-    return response.json({ message: 'preencha todos os campos' })
+async function signUp (req, res) {
+  const { email, password, name, username } = req.body
+  if (!email || !password || !name || !username) { // se algum campo estiver vazio, retorna um erro pro front
+    return res.json({ message: 'preencha todos os campos' })
   }
 
-  const usersCollection = client.db('mangaten').collection('users')
-
-  const registeredEmail = await usersCollection.findOne({ email })
+  const queryEmail = { username }
+  const queryUsername = { email }
+  const registeredEmail = await User.findOne({ $or: [queryEmail, queryUsername] })
   if (registeredEmail) {
-    return response.json({ message: 'email ocupado por outra conta' })
+    return res.json({ message: 'email ou username ocupado por outra conta' })
   }
 
   const passwordHash = await encryptPassword(password)
@@ -60,75 +64,115 @@ async function signUp (request, response) {
   const user = {
     email,
     password: passwordHash,
-    name
+    name,
+    username
   }
 
-  const newUserDoc = await usersCollection.insertOne(user) // cria usuario no banco
-  const newUser = newUserDoc.ops[0] // recebe o objeto recem criado no banco já com o id
-  delete newUser.password // remove password do objecto do usuario
+  try {
+    const userCreated = await User.create(user) // cria usuario no banco e recebe o objeto recem criado no banco já com o id
 
-  const token = generateToken(newUser)// gera token pro user
-  response.json({ token }) // retorna o token
+    const token = generateToken(userCreated) // gera token pro user
+    res.json({ token }) // retorna o token
+  } catch (error) {
+    res.status(403).json({ error }) // retorna o error
+  }
 }
 
-// TODO: criar rota que usa esse controler signUpAdmin onde somente um administrar pode acessar e criar conta para outros admininistradores
-// async function signUpAdmin () {
-
-// }
-
-async function signIn (request, response) {
-  const { email, password } = request.body
+async function signIn (req, res) {
+  const { email, password } = req.body
   if (!email || !password) { // verifica se os campos foram preenchidos
-    return response.json({ message: 'preencha email e password' })
+    return res.json({ message: 'preencha email e password' })
   }
 
-  const usersCollection = client.db('mangaten').collection('users')
-
-  const user = await usersCollection.findOne({ email }) // procura usuario com email e senha informado
+  const user = await User.findOne({ email }) // procura usuario com email e senha informado
   const isCorrectPassword = await verifyUserPassword(user, password) // verifica se a senha que o usuario inseriu dá o match com a senha do usuario do banco
 
   if (!user || !isCorrectPassword) {
-    return response.json({ message: 'email ou password incorreto' }) // exibe mensagem se não achar correspondencia
+    return res.json({ message: 'email ou password incorreto' }) // exibe mensagem se não achar correspondencia
   }
 
   const token = generateToken(user) // gera token
-  response.json({ token }) // retorna token
+  res.json({ token }) // retorna token
 }
 
-async function protect (request, response, next) {
-  const token = request.headers.authorization
+async function protect (req, res, next) {
+  const token = req.headers.authorization
 
   if (!token) {
-    return response.status(401).end()
+    return res.status(401).end()
   }
 
   const payload = await verifyToken(token)
 
   if (!payload) {
-    return response.status(401).end()
+    return res.status(401).end()
   }
 
-  const usersCollection = client.db('mangaten').collection('users')
+  const projections = {
+    email: 1,
+    name: 1,
+    username: 1,
+    isAdmin: 1
+  }
+  const user = await User.findOne({ _id: payload._id }, projections)
 
-  const user = await usersCollection.findOne({ _id: ObjectId(payload._id) }, { email: true, name: true, password: false })
-
+  console.log('user', user)
   if (!user) {
-    return response.status(401).end()
+    return res.status(401).end()
   }
 
-  request.user = user
+  req.user = user
 
   next()
 }
 
-// TODO: criar o middlewProctedAdin onde executa a mesam forma que o protect e valida se o usuario logado é um admin
-// TODO: usar esse middleware para proteger as rotas de criar novos admins, e criar/delete/modificar produtos
-// async function protectAdmin (request, response, next) {
+// admin
+async function signUpAdmin (req, res) {
+  const { email, password, name, username } = req.body
+  if (!email || !password || !name || !username) { // se algum campo estiver vazio, retorna um erro pro front
+    return res.json({ message: 'preencha todos os campos' })
+  }
 
-// }
+  const queryEmail = { username }
+  const queryUsername = { email }
+  const registeredEmail = await User.findOne({ $or: [queryEmail, queryUsername] })
+  if (registeredEmail) {
+    return res.json({ message: 'email ou username ocupado por outra conta' })
+  }
 
-module.exports = { // exporta as funçoes
+  const passwordHash = await encryptPassword(password)
+
+  const user = {
+    email,
+    password: passwordHash,
+    name,
+    username,
+    isAdmin: true
+  }
+
+  try {
+    await User.create(user) // cria usuario no banco e recebe o objeto recem criado no banco já com o id
+
+    res.status(201).end() // retorna o token
+  } catch (error) {
+    res.status(403).json({ error }) // retorna o error
+  }
+}
+
+async function protectAdmin (req, res, next) {
+  if (!req.user || !req.user.isAdmin) {
+    return res.status(401).end()
+  }
+
+  next()
+}
+
+// exporta as funçoes
+module.exports = {
   signUp,
   signIn,
-  protect
+  encryptPassword,
+  protect,
+  protectAdmin,
+  signUpAdmin
 }

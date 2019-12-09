@@ -1,3 +1,4 @@
+// vendors
 const mongoose = require('mongoose') // ODM - Object Document Model/Modeling
 
 const productSchema = new mongoose.Schema(
@@ -25,6 +26,7 @@ const productSchema = new mongoose.Schema(
   }
 )
 
-const Model = mongoose.model('product', productSchema)
+// vai ser a collection products no mongo
+const Product = mongoose.model('product', productSchema)
 
-module.exports = Model
+module.exports = Product

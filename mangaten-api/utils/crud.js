@@ -4,19 +4,21 @@ const getOne = (model) => async (req, res) => {
   try {
     const item = await model.findOne({ _id: id }).exec() // procura produto com o id
 
-    res.json({ item }) // retorna o product
+    res.json({ item }) // retorna o item
   } catch (error) {
+    console.error(error)
     res.status(404).end()
   }
 }
 
 const getMany = (model) => async (req, res) => {
   try {
-    const products = await model.find({}).exec() // traz todos os itens da coleção
+    const items = await model.find({}).exec() // traz todos os itens da coleção
 
-    res.json({ products: products }) // retorna os itens
+    res.json({ items }) // retorna os itens
   } catch (error) {
-    res.status(404).end(error)
+    console.error(error)
+    res.status(404).end()
   }
 }
 
@@ -26,9 +28,9 @@ const createOne = (model) => async (req, res) => {
   try {
     const created = await model.create(item)
     res.status(201).json({ data: created })
-  } catch (e) {
-    console.error(e)
-    res.status(400).send(e)
+  } catch (error) {
+    console.error(error)
+    res.status(400).end()
   }
 }
 
@@ -44,8 +46,8 @@ const updateOne = (model) => async (req, res) => {
     }
 
     res.status(200).json({ data: updated })
-  } catch (e) {
-    console.error(e)
+  } catch (error) {
+    console.error(error)
     res.status(400).end()
   }
 }
@@ -61,8 +63,8 @@ const removeOne = (model) => async (req, res) => {
     }
 
     return res.status(200).json({ data: removed })
-  } catch (e) {
-    console.error(e)
+  } catch (error) {
+    console.error(error)
     res.status(400).end()
   }
 }
