@@ -1,6 +1,9 @@
 import React from "react";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 
+import LoginForm from './components/LoginForm'
+import Profile from './components/Profile'
+
 export default function Routes() {
   return (
     <BrowserRouter>
@@ -14,7 +17,10 @@ export default function Routes() {
               <Link to="/about">Sobre</Link>
             </li>
             <li>
-              <Link to="/topics">Topicos</Link>
+              <Link to="/perfil">Perfil</Link>
+            </li>
+            <li>
+              <Link to="/login">Login</Link>
             </li>
           </ul>
         </nav>
@@ -24,8 +30,11 @@ export default function Routes() {
         <Route path="/about">
           <div>Sobre</div>
         </Route>
-        <Route path="/topics">
-          <div>topicos</div>
+        <Route path="/login">
+          <LoginForm />
+        </Route>
+        <Route path="/perfil">
+          <Profile />
         </Route>
         <Route path="/">
           <div>Pagina inicial</div>
