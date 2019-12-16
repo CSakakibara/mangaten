@@ -5,13 +5,16 @@ const router = Router()
 // auth
 const { protect, protectAdmin } = require('../../utils/auth')
 
+//
+const upload = require('../../utils/upload')
+
 // controller
 const controller = require('./product.controller')
 
 // /products
 router.route('/')
   .get(controller.getMany)
-  .post(protect, protectAdmin, controller.createOne)
+  .post(protect, protectAdmin, upload.single('image'), controller.createOne)
 
 // /products/:id
 router.route('/:id')

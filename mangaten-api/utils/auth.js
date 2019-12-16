@@ -81,14 +81,14 @@ async function signUp (req, res) {
 async function signIn (req, res) {
   const { email, password } = req.body
   if (!email || !password) { // verifica se os campos foram preenchidos
-    return res.json({ message: 'preencha email e password' })
+    return res.json({ message: 'Preencha email e password' })
   }
 
   const user = await User.findOne({ email }) // procura usuario com email e senha informado
   const isCorrectPassword = await verifyUserPassword(user, password) // verifica se a senha que o usuario inseriu dá o match com a senha do usuario do banco
 
   if (!user || !isCorrectPassword) {
-    return res.json({ message: 'email ou password incorreto' }) // exibe mensagem se não achar correspondencia
+    return res.json({ message: 'Email ou password incorreto' }) // exibe mensagem se não achar correspondencia
   }
 
   const token = generateToken(user) // gera token
@@ -130,14 +130,14 @@ async function protect (req, res, next) {
 async function signUpAdmin (req, res) {
   const { email, password, name, username } = req.body
   if (!email || !password || !name || !username) { // se algum campo estiver vazio, retorna um erro pro front
-    return res.json({ message: 'preencha todos os campos' })
+    return res.json({ message: 'Preencha todos os campos' })
   }
 
   const queryEmail = { username }
   const queryUsername = { email }
   const registeredEmail = await User.findOne({ $or: [queryEmail, queryUsername] })
   if (registeredEmail) {
-    return res.json({ message: 'email ou username ocupado por outra conta' })
+    return res.json({ message: 'Email ou username ocupado por outra conta' })
   }
 
   const passwordHash = await encryptPassword(password)

@@ -22,11 +22,25 @@ const productSchema = new mongoose.Schema(
     author: {
       type: String,
       trim: true
+    },
+    image: {
+      type: String,
+      trim: true
+    },
+    stock: {
+      type: Number,
+      required: true,
+      trim: true
+    },
+    genre: {
+      type: String,
+      trim: true
     }
   }
 )
 
-// vai ser a collection products no mongo
+productSchema.index({ title: 'text' })
+//define a collection product, e utiliza o schema criado
 const Product = mongoose.model('product', productSchema)
 
 module.exports = Product
