@@ -1,0 +1,30 @@
+.header {
+    background-color: #828ADB;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 18px;
+}
+
+.header ul {
+    list-style-type: none;
+    display: flex;
+    text-align: right;
+    margin: 0;
+    padding: 0;
+}
+
+.header li {
+    text-align: center;
+    padding: 14px 16px;
+}
+
+.header a {
+    color: white;
+    text-decoration: none;
+    font-family: Roboto;
+}
+
+.header a:hover {
+    opacity: 0.5;
+}

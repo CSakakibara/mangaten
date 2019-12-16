@@ -1,0 +1,151 @@
+.products {
+    margin-top:30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.products-search {
+    display: flex;
+    align-items: center;
+}
+
+.products-search select {
+    margin: 0 10px;
+    height: 42px;
+}
+
+.products-search button {
+    width: 90px;
+    height: 42px;
+}
+
+.products-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.product-list-item {
+    position: relative;
+    border-radius: 5px;
+    border: 1px solid #828ADB;
+    margin: 20px;
+    width: 230px;
+    height: 280px;
+}
+
+.product-list-item--image {
+    position: relative;
+    width: 95%;
+    height: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2%;
+}
+
+.product-list-item--title{
+    position: absolute;
+    left: 2%;
+    top: 55%;
+
+
+    font-size: 14px;
+
+    color: #000000;
+}
+
+.product-list-item--volume{
+    position: absolute;
+    left: 2%;
+    bottom: 22%;
+
+
+    font-weight: bold;
+    font-size: 12px;
+
+    color: #000000;
+}
+
+.product-list-item--price{
+    position: absolute;
+    bottom: 18%;
+    left: 2%;
+
+
+    font-weight: bold;
+    font-size: 12px;
+
+    color: #828ADB;
+}
+
+.product-list-item--button{
+    position: absolute;
+    widows: 100%;
+    bottom: 0;
+    width: 95%;
+    height: 40px;
+    left: 5px;
+}
+
+.product{
+    position: relative;
+
+}
+
+.product--image{
+    position: absolute;
+    width: 600px;
+    height: 337.5px;
+    top:50px;
+    left: 20px;
+}
+
+.product--title{
+    position: absolute;
+    top: 50px;
+    left: 650px;
+
+
+    font-weight: bold;
+    font-size: 24px;
+    color: #000000;
+}
+
+.product--volume{
+    position: absolute;
+    top: 200px;
+    left: 650px;
+
+
+    font-size: 18px;
+
+    color: #000000
+}
+
+
+.product--price{
+    position: absolute;
+    top: 220px;
+    left: 650px;
+
+    font-weight: bold;
+    font-size: 18px;
+
+    color: #828ADB;
+}
+
+
+.product-description{
+    position: absolute;
+    top:  250px;
+    left: 650px;
+}
+
+#addCart{
+    position: absolute;
+    top: 400px;
+    left: 20px;
+    width: 600px;
+}
