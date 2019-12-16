@@ -10,14 +10,11 @@ const User = require('../user/user.model')
 // controller
 const controller = makeCrudController(Product)
 
-// examplos de pesquisa
-// http://localhost:5000/products?title="sword art"
-// http://localhost:5000/products?genre="drama"
+
 controller.getMany = async (req, res) => {
   try {
     const title = req.query.title
     const genre = req.query.genre
-  
     const query = {}
 
     if (title) {
