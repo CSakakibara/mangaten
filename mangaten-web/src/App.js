@@ -90,7 +90,13 @@ class App extends React.Component {
             />
           </Route>
           <Route path="/">
-            <div>Pagina inicial</div>
+            <div>
+              <img src='/images/home.png'
+                alt="Welcome"
+                width="1270"
+                height="640"
+              />
+            </div>
           </Route>
         </Switch>
       </BrowserRouter>

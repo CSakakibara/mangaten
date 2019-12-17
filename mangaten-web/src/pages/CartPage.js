@@ -23,7 +23,9 @@ function CartPage(props) {
   const [cep, setCep] = React.useState(null)
 
   function buy() {
-
+    axios.post('/batata',{
+      cart:props.cart
+    })
   }
 
   function calculate() {
@@ -36,7 +38,14 @@ function CartPage(props) {
   const isCartEmpty = props.cart.length === 0
 
   if (isCartEmpty) {
-    return <div>Carrinhos Vazio</div>
+    return (
+      <div>
+        <img className="emptycart"
+          src='/images/empty-cart.png'
+          alt="Carrinho Vazio"
+        />
+      </div>
+    )
   }
 
   let total = null
@@ -55,36 +64,27 @@ function CartPage(props) {
 
           <div className="cart-item--total-amount">
             <div className="cart-item--amount">
-              <span onClick={() => props.removeProductFromCart(item.product)}>-</span>
+              <span className="selector-button" onClick={() => props.removeProductFromCart(item.product)}>-</span>
               {item.total}
-              <span onClick={() => props.addProductToCart(item.product)}>+</span>
+              <span className="selector-button" onClick={() => props.addProductToCart(item.product)}>+</span>
             </div>
 
             <div className="cart-item--total">
               R$ {(item.product.price * item.total).toFixed(2)}
+              <br></br><br></br>
             </div>
           </div>
         </div>
       )}
       <div className="cart-total">
-        total: R$ {total.toFixed(2)}
+        Total: R$ {total.toFixed(2)}
       </div>
 
       {!isCartEmpty &&
         <div className="cart-item--cep">
-          {shippingPrice &&
-            <div>
-              <div>
-                preço pac: {shippingPrice.sedexPrice}
-              </div>
-              <div>
-                preço sedex: {shippingPrice.pacPrice}
-              </div>
-            </div>
-          }
           <label><b>CEP</b></label>
           <input
-            placeholder="ex: 38406400"
+            placeholder="Insira seu cep. Ex: 38406400"
             value={cep}
             type="text"
             onChange={(event) => setCep(event.target.value)}
@@ -96,6 +96,16 @@ function CartPage(props) {
           >
             Calcular
           </button>
+          {shippingPrice &&
+            <div>
+              <div>
+                Preço pac: {shippingPrice.sedexPrice}
+              </div>
+              <div>
+                Preço sedex: {shippingPrice.pacPrice}
+              </div>
+            </div>
+          }
         </div>
       }
 

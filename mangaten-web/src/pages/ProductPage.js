@@ -9,7 +9,7 @@ import axios from '../utils/axios'
 
 import Loading from '../components/Loading'
 
-const URL = 'http://localhost:5000/images/'
+const URL = 'https://mangaten-api.herokuapp.com/images/'
 
 class ProductsPage extends React.Component {
   state = {
@@ -24,7 +24,7 @@ class ProductsPage extends React.Component {
       .then(payload => {
         this.setState({ product: payload.data.item, isLoading: false })
       })
-    
+
   }
 
   addToCart = () => {
@@ -51,11 +51,14 @@ class ProductsPage extends React.Component {
             onClick={this.addToCart}
           >
             Adicionar ao carrinho
-          </button>          
+          </button>
         </div>
         <div className="product--title">{product.title}</div>
-        <div className="product--volume">Volume: {product.volume}</div>
-        <div className="product--price">R$ {product.price}</div>
+        <div className="product--volume">Volume: {product.volume} <br></br>
+          Escrito por: {product.author} <br></br>
+          Quantidade estoque: {product.stock}
+        </div>
+        <div className="product--price"> R$ {product.price}</div>
         <div className="product--description">{product.description}</div>
 
       </div>

@@ -41,3 +41,17 @@
     text-align: left;
     margin: 10px auto;
 }
+
+.emptycart{
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
+}
+
+.selector-button{
+    background:  #828ADB;
+    border: 1px solid black;
+    margin-left: 4px;
+    margin-right: 4px;
+
+}

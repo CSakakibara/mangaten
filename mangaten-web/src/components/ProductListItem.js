@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const URL = 'http://localhost:5000/images/'
+//const URL = 'http://localhost:5000/images'
+const URL = 'https://mangaten-api.herokuapp.com/images/'
 
 function Product(props) {
   return (
