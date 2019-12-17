@@ -16,7 +16,7 @@ import styled from 'styled-components/native'
 
 const Container = styled.View`
   background-color: papayawhip;
-  justify-content: center; 
+  justify-content: center;
 `
 
 export default function ProductsScreen(props) {

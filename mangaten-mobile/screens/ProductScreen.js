@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Image, Text, Button, StyleSheet } from 'react-native';
 
+
 const URL = 'https://mangaten-api.herokuapp.com/images/'
 
 function ProductScreen(props) {

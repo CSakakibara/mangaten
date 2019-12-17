@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 const URL = 'https://mangaten-api.herokuapp.com/'
 
 const instance = axios.create({

@@ -111,13 +111,13 @@ function CartScreen(props) {
         </Item>
       )}
       <Text>
-        total: R$ {total.toFixed(2)}
+        Total: R$ {total.toFixed(2)}
       </Text>
       {!isCartEmpty &&
         <View>
           <Text>CEP</Text>
           <TextInput
-            placeholder="ex: 38406400"
+            placeholder="Insira seu cep. ex: 38406400"
             value={cep}
             onChangeText={(text ) => setCep(text )}
           />
@@ -130,10 +130,11 @@ function CartScreen(props) {
           {shippingPrice &&
             <Text>
               <Text>
-                preço pac: {shippingPrice.sedexPrice}
+                Preço pac: {shippingPrice.sedexPrice}
               </Text>
+
               <Text>
-                preço sedex: {shippingPrice.pacPrice}
+                Preço sedex: {shippingPrice.pacPrice}
               </Text>
             </Text>
           }
