@@ -63,6 +63,10 @@ class App extends React.Component {
     this.setState({ cart })
   }
 
+  resetCart = () => {
+    this.setState({ cart: [] })
+  }
+
   render() {
     console.log('cart', this.state.cart)
     return (
@@ -87,6 +91,7 @@ class App extends React.Component {
               cart={this.state.cart}
               addProductToCart={this.addProductToCart}
               removeProductFromCart={this.removeProductFromCart}
+              resetCart={this.resetCart}
             />
           </Route>
           <Route path="/">

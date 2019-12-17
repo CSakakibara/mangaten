@@ -26,6 +26,8 @@ function CartPage(props) {
     axios.post('/batata',{
       cart:props.cart
     })
+    props.resetCart()
+
   }
 
   function calculate() {
@@ -111,7 +113,7 @@ function CartPage(props) {
 
       {total &&
         <>
-          <button onClick={buy}>Finalizar Compra</button>
+          <button onClick={() => buy()}>Finalizar Compra</button>
         </>
       }
     </div>
